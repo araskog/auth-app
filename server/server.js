@@ -30,8 +30,6 @@ const database = {
 };
 
 app.post("/signin", (req, res) => {
-  console.log(req.body.email, req.body.password);
-  console.log(database.users[0].email, database.users[0].password);
   if (
     req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password
@@ -43,8 +41,17 @@ app.post("/signin", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  console.log("Registration details", req.body);
-  res.json("register");
+  const { email, firsName, lastName, password } = req.body;
+  database.users.push({
+    id: "321",
+    firstName: firsName,
+    lastName: lastName,
+    email: email,
+    password: password,
+    logins: [new Date()],
+    joined: new Date(),
+  });
+  res.json(database.users[database.users.length - 1]);
 });
 
 app.listen(PORT, () => {

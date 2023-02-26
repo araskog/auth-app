@@ -8,10 +8,16 @@ export const UserPage = ({ user, logOut }) => {
     return (
       <Container maxWidth="sm">
         <h1>Hi {user.firstName}! 👋</h1>
+        <p>Here are your ten most recent logins:</p>
         <List>
-          <ListItem disablePadding>
-            <p>Login 1</p>
-          </ListItem>
+          {user.logins.map((login, index) => {
+            if (index == 9) return;
+            return (
+              <ListItem key={login}>
+                <p>{login}</p>
+              </ListItem>
+            );
+          })}
         </List>
         <Button onClick={logOut}>Log out</Button>
       </Container>

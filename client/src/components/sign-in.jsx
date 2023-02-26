@@ -17,7 +17,6 @@ export const SignIn = ({ loadUser }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("password"));
     fetch("/signin", {
       method: "post",
       headers: { "Content-Type": "application/json" },

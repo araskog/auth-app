@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +13,7 @@ const theme = createTheme();
 
 export const Register = ({ loadUser }) => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const onSubmitSignIn = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -21,16 +23,17 @@ export const Register = ({ loadUser }) => {
       body: JSON.stringify({
         email: data.get("email"),
         password: data.get("password"),
-        firstNname: data.get("firstName"),
+        firstName: data.get("firstName"),
         lastName: data.get("lastName"),
       }),
     })
       .then((response) => response.json())
-      .then((user) => {
-        if (user.id) {
-          loadUser(user);
+      .then((data) => {
+        if (data.id) {
+          loadUser(data);
           navigate("/user");
         }
+        setError(data);
       });
   };
 
@@ -49,12 +52,7 @@ export const Register = ({ loadUser }) => {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={onSubmitSignIn}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" onSubmit={onSubmitSignIn} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -107,6 +105,11 @@ export const Register = ({ loadUser }) => {
             >
               Sign Up
             </Button>
+            {error && (
+              <Grid color="red" item>
+                An error occured when registering
+              </Grid>
+            )}
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to={`/signin`}>Already have an account? Sign in</Link>

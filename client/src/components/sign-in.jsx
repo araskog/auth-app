@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +13,7 @@ const theme = createTheme();
 
 export const SignIn = ({ loadUser }) => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,9 +27,12 @@ export const SignIn = ({ loadUser }) => {
       }),
     })
       .then((response) => response.json())
-      .then((user) => {
-        loadUser(user);
-        navigate("/user");
+      .then((data) => {
+        if (data) {
+          loadUser(data);
+          navigate("/user");
+        }
+        setError(data);
       });
   };
 
@@ -46,12 +51,7 @@ export const SignIn = ({ loadUser }) => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -80,6 +80,11 @@ export const SignIn = ({ loadUser }) => {
             >
               Sign In
             </Button>
+            {error && (
+              <Grid color="red" item>
+                An error occured when signing in
+              </Grid>
+            )}
             <Grid container>
               <Grid item>
                 <Link to={`/`}>{"Don't have an account? Sign Up"}</Link>

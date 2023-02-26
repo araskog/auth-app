@@ -1,5 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const knex = require("knex");
+
+const db = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    user: "",
+    password: "",
+    database: "users",
+  },
+});
 
 const PORT = process.env.PORT || 3001;
 
@@ -41,16 +52,15 @@ app.post("/signin", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const { email, firsName, lastName, password } = req.body;
-  database.users.push({
-    id: "321",
-    firstName: firsName,
-    lastName: lastName,
-    email: email,
-    password: password,
-    logins: [new Date()],
-    joined: new Date(),
-  });
+  const { email, firstName, lastName, password } = req.body;
+  db("users")
+    .insert({
+      email: email,
+      firstname: firstName,
+      lastname: lastName,
+      joined: new Date(),
+    })
+    .then((data) => console.log(data));
   res.json(database.users[database.users.length - 1]);
 });
 

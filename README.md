@@ -2,9 +2,36 @@
 
 This is an authentication app built with React and a Node on Express server, using Material UI design.
 
+## Requirements
+
+Install PostgreSQL, create a database `createdb users` and create two tables:
+
+```
+create table login(
+id serial primary key,
+hash varchar(100) not null,
+email text unique not null
+);
+```
+
+```
+create table users (
+id serial primary key,
+firstname VARCHAR(100),
+lastname VARCHAR(100),
+email text unique not null,
+logins date[],
+joined date
+);
+```
+
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, run:
+
+### `psql 'users'`
+
+This will start the database service.
 
 ### `npm run dev`
 

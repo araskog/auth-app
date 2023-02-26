@@ -1,13 +1,15 @@
-import logo from './logo.svg';
-import { Register } from './components/register';
-import './App.css';
+import { Routes, Route } from 'react-router-dom'
+import { Register } from "./components/register";
+import { SignIn } from "./components/sign-in"
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-       <Register />
-      </header>
+      <Routes>
+        <Route path="/" exact element={<Register />} />
+        <Route path="/signIn" element={<SignIn />} />
+      </Routes>
     </div>
   );
 }

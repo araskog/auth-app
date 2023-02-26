@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const knex = require("knex");
+const bcrypt = require("bcrypt-nodejs");
 
 const db = knex({
   client: "pg",
@@ -17,51 +18,41 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 app.use(bodyParser.json());
 
-const database = {
-  users: [
-    {
-      id: "123",
-      firstName: "Jane",
-      lastName: "Doe",
-      email: "jane@gmail.com",
-      password: "happy",
-      logins: [],
-      joined: new Date(),
-    },
-    {
-      id: "321",
-      firstName: "John",
-      lastName: "Doe",
-      email: "john@gmail.com",
-      password: "sad",
-      logins: [],
-      joined: new Date(),
-    },
-  ],
-};
-
 app.post("/signin", (req, res) => {
-  if (
-    req.body.email === database.users[0].email &&
-    req.body.password === database.users[0].password
-  ) {
-    res.json("success");
-  } else {
-    res.status(400).json("Error logging in");
-  }
+  // const { }
+  //   res.json("success");
+  // } else {
+  //   res.status(400).json("Error logging in");
+  // }
 });
 
 app.post("/register", (req, res) => {
   const { email, firstName, lastName, password } = req.body;
-  db("users")
-    .insert({
-      email: email,
-      firstname: firstName,
-      lastname: lastName,
-      joined: new Date(),
-    })
-    .then((data) => console.log(data));
-  res.json(database.users[database.users.length - 1]);
+  const hash = bcrypt.hashSync(password);
+
+  db.transaction((trx) => {
+    trx
+      .insert({
+        hash: hash,
+        email: email,
+      })
+      .into("login")
+      .returning("email")
+      .then((loginEmail) =>
+        db("users")
+          .returning("*")
+          .insert({
+            email: loginEmail,
+            firstname: firstName,
+            lastname: lastName,
+            logins: [new Date()],
+            joined: new Date(),
+          })
+      )
+      .then((user) => res.json(user[0]))
+      .then(trx.commit)
+      .catch(trx.rollback);
+  }).catch((err) => res.status(400).json("Unable to register"));
 });
 
 app.listen(PORT, () => {

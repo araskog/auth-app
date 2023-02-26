@@ -14,11 +14,16 @@ export const UserPage = ({ user, logOut }) => {
         <p>Here are your ten most recent logins:</p>
         <List>
           {loginList.map((login, index) => {
-            if (index === 9) return;
+            if (index >= 10) return;
             return (
               <ListItem key={index}>
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3114/3114812.png"
+                  alt="clock"
+                  style={{ height: "20px", marginRight: "10px" }}
+                />
                 <p>
-                  {login.split("T")[0]} at {login.split("T")[1]}
+                  {login.split("T")[0]} at {login.split("T")[1].split(".")[0]}
                 </p>
               </ListItem>
             );

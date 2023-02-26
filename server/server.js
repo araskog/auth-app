@@ -19,11 +19,28 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post("/signin", (req, res) => {
-  // const { }
-  //   res.json("success");
-  // } else {
-  //   res.status(400).json("Error logging in");
-  // }
+  db.transaction((trx) => {
+    trx
+      .select("email", "hash")
+      .where("email", "=", req.body.email)
+      .from("login")
+      .then((data) => {
+        const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+        if (isValid) {
+          db.select("logins")
+            .from("users")
+            .where("email", "=", req.body.email)
+            .update({
+              logins: db.raw("array_append(logins, ?)", [new Date()]),
+            })
+            .returning("*")
+            .then((user) => res.json(user[0]))
+            .catch((err) => res.status(400).json("Unable to log in"));
+        }
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  }).catch((err) => res.status(400).json("Unable to log in"));
 });
 
 app.post("/register", (req, res) => {
@@ -37,12 +54,11 @@ app.post("/register", (req, res) => {
         email: email,
       })
       .into("login")
-      .returning("email")
-      .then((loginEmail) =>
+      .then(() =>
         db("users")
           .returning("*")
           .insert({
-            email: loginEmail,
+            email: email,
             firstname: firstName,
             lastname: lastName,
             logins: [new Date()],

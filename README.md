@@ -20,7 +20,7 @@ id serial primary key,
 firstname VARCHAR(100),
 lastname VARCHAR(100),
 email text unique not null,
-logins date[],
+logins timestamp[],
 joined date
 );
 ```

@@ -5,13 +5,15 @@ import Container from "@mui/material/Container";
 
 export const UserPage = ({ user, logOut }) => {
   if (user) {
+    const loginList = user.logins.reverse();
+    loginList.sort((a, b) => Date.parse(b) - Date.parse(a));
     return (
       <Container maxWidth="sm">
         <h1>Hi {user.firstname}! 👋</h1>
         <p>Your email is {user.email}</p>
         <p>Here are your ten most recent logins:</p>
         <List>
-          {user.logins.map((login, index) => {
+          {loginList.map((login, index) => {
             if (index === 9) return;
             return (
               <ListItem key={index}>
@@ -25,5 +27,5 @@ export const UserPage = ({ user, logOut }) => {
         <Button onClick={logOut}>Log out</Button>
       </Container>
     );
-  } else return <Button onClick={logOut}>Please log in</Button>;
+  } else return <Button onClick={logOut}>Please register to log in</Button>;
 };

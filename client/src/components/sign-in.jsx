@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -10,7 +10,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();
 
-export const SignIn = () => {
+export const SignIn = ({ loadUser }) => {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -23,12 +24,10 @@ export const SignIn = () => {
         password: data.get("password"),
       }),
     })
-      .then((response) => {
-        console.log(response.json());
-      })
+      .then((response) => response.json())
       .then((user) => {
-        // Show logout button
-        // Show last 10 logins
+        loadUser(user);
+        navigate("/user");
       });
   };
 

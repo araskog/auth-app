@@ -11,9 +11,9 @@ export const UserPage = ({ user, logOut }) => {
         <p>Here are your ten most recent logins:</p>
         <List>
           {user.logins.map((login, index) => {
-            if (index == 9) return;
+            if (index === 9) return;
             return (
-              <ListItem key={login}>
+              <ListItem key={index}>
                 <p>{login}</p>
               </ListItem>
             );

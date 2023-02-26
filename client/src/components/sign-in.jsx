@@ -14,6 +14,7 @@ const theme = createTheme();
 export const SignIn = ({ loadUser }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -28,6 +29,7 @@ export const SignIn = ({ loadUser }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
+          console.log(data);
           loadUser(data);
           navigate("/user");
         }
@@ -56,7 +58,7 @@ export const SignIn = ({ loadUser }) => {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email Address or Username"
               name="email"
               autoComplete="email"
               autoFocus

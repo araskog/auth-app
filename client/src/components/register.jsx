@@ -80,7 +80,7 @@ export const Register = ({ loadUser }) => {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Email Address or Username"
                   name="email"
                   autoComplete="email"
                 />

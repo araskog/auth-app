@@ -14,7 +14,22 @@ export const Register = () => {
   const onSubmitSignIn = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log("Sign in user ", data);
+    fetch("/register", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: data.get("email"),
+        password: data.get("password"),
+        firstNname: data.get("firstName"),
+        lastName: data.get("lastName"),
+      }),
+    })
+      .then((response) => {
+        console.log(response.json());
+      })
+      .then((user) => {
+        // Show logout button
+      });
   };
 
   return (

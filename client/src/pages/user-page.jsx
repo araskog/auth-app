@@ -7,14 +7,17 @@ export const UserPage = ({ user, logOut }) => {
   if (user) {
     return (
       <Container maxWidth="sm">
-        <h1>Hi {user.firstName}! 👋</h1>
+        <h1>Hi {user.firstname}! 👋</h1>
+        <p>Your email is {user.email}</p>
         <p>Here are your ten most recent logins:</p>
         <List>
           {user.logins.map((login, index) => {
             if (index === 9) return;
             return (
               <ListItem key={index}>
-                <p>{login}</p>
+                <p>
+                  {login.split("T")[0]} at {login.split("T")[1]}
+                </p>
               </ListItem>
             );
           })}

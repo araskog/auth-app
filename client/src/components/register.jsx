@@ -14,6 +14,7 @@ const theme = createTheme();
 export const Register = ({ loadUser }) => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+
   const onSubmitSignIn = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

@@ -29,7 +29,6 @@ export const SignIn = ({ loadUser }) => {
       .then((response) => response.json())
       .then((data) => {
         if (data) {
-          console.log(data);
           loadUser(data);
           navigate("/user");
         }

@@ -10,13 +10,13 @@ export const UserPage = ({ user, logOut }) => {
     return (
       <Container maxWidth="sm">
         <h1>Hi {user.firstname}! 👋</h1>
-        <p>Your email is {user.email}</p>
-        <p>Here are your ten most recent logins:</p>
+        <p>Your username is {user.email}.</p>
+        <p>Here are your most recent logins:</p>
         <List>
           {loginList.map((login, index) => {
-            if (index >= 10) return;
+            if (index >= 10) return null;
             return (
-              <ListItem key={index}>
+              <ListItem key={index} sx={{ padding: "0 8px" }}>
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/3114/3114812.png"
                   alt="clock"
@@ -32,5 +32,11 @@ export const UserPage = ({ user, logOut }) => {
         <Button onClick={logOut}>Log out</Button>
       </Container>
     );
-  } else return <Button onClick={logOut}>Please register to log in</Button>;
+  } else
+    return (
+      <Container maxWidth="sm">
+        <h1>Access denied</h1>
+        <Button onClick={logOut}>Please register to log in</Button>
+      </Container>
+    );
 };
